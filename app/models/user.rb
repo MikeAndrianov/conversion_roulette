@@ -13,9 +13,12 @@ class User < ApplicationRecord
     login = conditions.delete(:login)
 
     if login
-      find_user_by_login
+      where(conditions.to_hash)
+        .where(['lower(username) = :value OR lower(email) = :value', { value: login.downcase }])
+        .first
     elsif conditions.key?(:username) || conditions.key?(:email)
-      find_user_by_username_or_email
+      conditions[:email].downcase! if conditions[:email]
+      where(conditions.to_hash).first
     end
   end
 
@@ -25,14 +28,11 @@ class User < ApplicationRecord
     errors.add(:username, :invalid) if User.where(email: username).exists?
   end
 
-  def find_user_by_login
-    where(conditions.to_hash)
-      .where(['lower(username) = :value OR lower(email) = :value', { value: login.downcase }])
-      .first
+  def self.find_user_by_login(conditions)
+
   end
 
-  def find_user_by_username_or_email
-    conditions[:email].downcase! if conditions[:email]
-    where(conditions.to_hash).first
+  def self.find_user_by_username_or_email(conditions)
+
   end
 end
