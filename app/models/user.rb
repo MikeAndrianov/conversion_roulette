@@ -29,12 +29,4 @@ class User < ApplicationRecord
   def validate_username
     errors.add(:username, :invalid) if User.where(email: username).exists?
   end
-
-  def self.find_user_by_login(conditions)
-
-  end
-
-  def self.find_user_by_username_or_email(conditions)
-
-  end
 end
