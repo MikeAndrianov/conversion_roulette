@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Currency:</strong>
+  <%= @forecast.currency %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @forecast.amount %>
+</p>
+
+<p>
+  <strong>Target currency:</strong>
+  <%= @forecast.target_currency %>
+</p>
+
+<p>
+  <strong>Max waithing time:</strong>
+  <%= @forecast.max_waiting_time %>
+</p>
+
+<p>
+  <strong>Date from:</strong>
+  <%= @forecast.date_from %>
+</p>
+
+<p>
+  <strong>Date to:</strong>
+  <%= @forecast.date_to %>
+</p>
+
+<%= link_to 'Edit', edit_forecast_path(@forecast) %> |
+<%= link_to 'Back', forecasts_path %>

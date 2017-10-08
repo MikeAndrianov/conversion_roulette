@@ -1,0 +1,35 @@
+<%= form_with(model: forecast, local: true) do |f| %>
+  <div class='form-group'>
+    <%= f.label :currency %>
+    <%= f.select :currency, Forecast::SUPPORTED_CURRENCIES, {}, { id: :forecast_currency, class: 'form-control' } %>
+  </div>
+
+  <div class='form-group'>
+    <%= f.label :amount %>
+    <%= f.number_field :amount, id: :forecast_amount, class: 'form-control' %>
+  </div>
+
+  <div class='form-group'>
+    <%= f.label :target_currency %>
+    <%= f.select :target_currency, Forecast::SUPPORTED_CURRENCIES, {}, { id: :forecast_currency, class: 'form-control' } %>
+  </div>
+
+  <div class='form-group'>
+    <%= f.label :max_waiting_time, 'Max Waiting Time (weeks)' %>
+    <%= f.number_field :max_waiting_time, id: :forecast_max_waiting_time, class: 'form-control' %>
+  </div>
+
+  <div class='form-group'>
+    <%#= f.label :date_from %>
+    <%#= f.text_field :date_from, id: :forecast_date_from, class: 'form-control datepicker', data: { provide: 'datepicker' } %>
+  </div>
+
+  <div class='form-group'>
+    <%#= f.label :date_to %>
+    <%#= f.text_field :date_to, id: :forecast_date_to, class: 'form-control datepicker', data: { provide: 'datepicker' } %>
+  </div>
+
+  <div class='actions'>
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
+<% end %>

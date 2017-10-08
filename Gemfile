@@ -32,15 +32,18 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'bootstrap', '~> 4.0.0.beta'
+gem 'bootstrap-datepicker-rails'
+gem 'date_validator'
 gem 'devise'
 gem 'pg'
 gem 'rubocop', require: false
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
+  gem 'faker'
+  gem 'pry-byebug'
+  gem 'pry-rails'
   gem 'rspec-rails'
   gem 'selenium-webdriver'
 end
@@ -55,7 +58,9 @@ group :development do
 end
 
 group :test do
+  gem 'database_cleaner'
   gem 'factory_girl_rails'
+  gem 'shoulda-matchers'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

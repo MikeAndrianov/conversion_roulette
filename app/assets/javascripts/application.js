@@ -13,5 +13,15 @@
 //= require rails-ujs
 //= require turbolinks
 //= require jquery
+//= require bootstrap-datepicker
 //= require bootstrap-sprockets
 //= require_tree .
+
+$(document).ready(function(){
+  $('.datepicker').datepicker({
+    autoclose: true,
+    todayHighlight: true,
+    startDate: '0d',
+    format: 'yyyy-mm-dd'
+  });
+});

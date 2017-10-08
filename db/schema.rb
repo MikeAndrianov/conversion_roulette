@@ -10,10 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171002202638) do
+ActiveRecord::Schema.define(version: 20171007142514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "forecasts", force: :cascade do |t|
+    t.string "currency", null: false
+    t.float "amount", null: false
+    t.string "target_currency", null: false
+    t.integer "max_waiting_time", null: false
+    t.date "date_from", null: false
+    t.date "date_to", null: false
+    t.bigint "forecasts_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["forecasts_id"], name: "index_forecasts_on_forecasts_id"
+    t.index ["user_id"], name: "index_forecasts_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -34,4 +49,6 @@ ActiveRecord::Schema.define(version: 20171002202638) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "forecasts", "forecasts", column: "forecasts_id"
+  add_foreign_key "forecasts", "users"
 end

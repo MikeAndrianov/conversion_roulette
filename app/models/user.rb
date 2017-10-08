@@ -5,6 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          authentication_keys: [:login]
 
+  has_many :forecasts
+
   validates :username, presence: true, uniqueness: { case_sensitive: false }
   validate :validate_username
 
