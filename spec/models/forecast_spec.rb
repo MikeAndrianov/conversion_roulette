@@ -10,6 +10,7 @@ RSpec.describe Forecast, type: :model do
     it { is_expected.to validate_presence_of(:max_waiting_time) }
     it { is_expected.to validate_numericality_of(:amount).is_greater_than(0) }
     it { is_expected.to validate_numericality_of(:max_waiting_time).only_integer.is_greater_than(0) }
+    it { is_expected.to validate_numericality_of(:max_waiting_time).is_less_than_or_equal_to(250)}
 
     it do
       is_expected.to validate_inclusion_of(:currency)

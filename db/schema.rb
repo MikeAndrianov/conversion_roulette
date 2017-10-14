@@ -10,10 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171007142514) do
+ActiveRecord::Schema.define(version: 20171014133703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "currency_rates", force: :cascade do |t|
+    t.string "base", null: false
+    t.date "date", null: false
+    t.json "rates", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "forecast_currency_rates", force: :cascade do |t|
+    t.date "date"
+    t.string "rate"
+    t.bigint "forecast_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["forecast_id"], name: "index_forecast_currency_rates_on_forecast_id"
+  end
 
   create_table "forecasts", force: :cascade do |t|
     t.string "currency", null: false
@@ -26,6 +43,7 @@ ActiveRecord::Schema.define(version: 20171007142514) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "state"
     t.index ["forecasts_id"], name: "index_forecasts_on_forecasts_id"
     t.index ["user_id"], name: "index_forecasts_on_user_id"
   end
@@ -49,6 +67,7 @@ ActiveRecord::Schema.define(version: 20171007142514) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "forecast_currency_rates", "forecasts"
   add_foreign_key "forecasts", "forecasts", column: "forecasts_id"
   add_foreign_key "forecasts", "users"
 end

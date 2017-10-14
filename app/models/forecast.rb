@@ -1,17 +1,32 @@
 class Forecast < ApplicationRecord
-  SUPPORTED_CURRENCIES = %w[AUD BGN BRL CAD CHF CNY CZK DKK EUR GBP HKD HRK HUF IDR ILS INR USD].freeze
+  include AASM
 
   belongs_to :user
+  has_many :forecast_currency_rates
 
   before_save :set_interval
 
   validates :currency, :target_currency, :amount, :max_waiting_time, presence: true
   validates :amount, numericality: { greater_than: 0 }
-  validates :max_waiting_time, numericality: { only_integer: true, greater_than: 0 }
-  validates :currency, :target_currency, inclusion: { in: SUPPORTED_CURRENCIES }
+  validates :max_waiting_time, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 250 }
+  validates :currency, :target_currency, inclusion: { in: CurrencyRate::SUPPORTED_CURRENCIES }
   validates :currency, exclusion: { in: ->(forecast) { [forecast.target_currency] } }
   validates :date_from, date: { before: :date_to, allow_blank: true }
   validates :date_from, date: { after: proc { Time.zone.today }, allow_blank: true }
+
+  aasm column: :state do
+    state :data_collecting, initial: true
+    state :processing
+    state :completed
+
+    event :to_processing do
+      transitions from: :data_collecting, to: :processing
+    end
+
+    event :to_completed do
+      transitions from: :processing, to: :completed
+    end
+  end
 
   private
 
