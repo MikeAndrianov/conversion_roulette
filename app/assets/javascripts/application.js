@@ -15,6 +15,8 @@
 //= require jquery
 //= require bootstrap-datepicker
 //= require bootstrap-sprockets
+//= require Chart.bundle
+//= require chartkick
 //= require_tree .
 
 $(document).ready(function(){

@@ -22,13 +22,18 @@
 
 <p>
   <strong>Date from:</strong>
-  <%= @forecast.date_from %>
+  <%= format_date(@forecast.date_from) %>
 </p>
 
 <p>
   <strong>Date to:</strong>
-  <%= @forecast.date_to %>
+  <%= format_date(@forecast.date_to) %>
 </p>
+
+<%= @presenter.exchange_amounts_line_chart(ytitle: "Amount (#{@forecast.target_currency})", library: { title: 'Exchange Amount' }) %>
+
+<%= @presenter.exchange_amounts_table %>
+
 
 <%= link_to 'Edit', edit_forecast_path(@forecast) %> |
 <%= link_to 'Back', forecasts_path %>

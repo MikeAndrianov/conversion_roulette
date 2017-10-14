@@ -31,10 +31,14 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'aasm'
 gem 'bootstrap', '~> 4.0.0.beta'
 gem 'bootstrap-datepicker-rails'
+gem 'chartkick'
 gem 'date_validator'
 gem 'devise'
+gem 'fixer_api', git: 'https://github.com/MikeAndrianov/fixer_api.git'
+gem 'geared_pagination'
 gem 'pg'
 gem 'rubocop', require: false
 

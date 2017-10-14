@@ -1,37 +1,9 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Forecasts</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Currency</th>
-      <th>Amount</th>
-      <th>Target currency</th>
-      <th>Max waithing time</th>
-      <th>Date from</th>
-      <th>Date to</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<%= render @page.records %>
 
-  <tbody>
-    <% @forecasts.each do |forecast| %>
-      <tr>
-        <td><%= forecast.currency %></td>
-        <td><%= forecast.amount %></td>
-        <td><%= forecast.target_currency %></td>
-        <td><%= forecast.max_waiting_time %></td>
-        <td><%= forecast.date_from %></td>
-        <td><%= forecast.date_to %></td>
-        <td><%= link_to 'Show', forecast %></td>
-        <td><%= link_to 'Edit', edit_forecast_path(forecast) %></td>
-        <td><%= link_to 'Destroy', forecast, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= @page.number %> of <%= @page.recordset.page_count %> (<%= @page.recordset.records_count %> total forecasts):
+<%= link_to "Next page", messages_path(page: @page.next_number) unless @page.last? %>
 
 <br>
-
 <%= link_to 'New Forecast', new_forecast_path %>

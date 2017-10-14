@@ -3,10 +3,18 @@ class ForecastsController < ApplicationController
   before_action :build_forecast, only: :create
 
   def index
-    @forecasts = current_user.forecasts
+    set_page_and_extract_portion_from current_user.forecasts.order(updated_at: :desc)
   end
 
-  def show; end
+  def show
+    # TODO: fix json response or remove
+    @currency_rates = CurrencyRate.where(
+      base: @forecast.currency,
+      date: dates_range
+    ).order(:date)
+
+    @presenter = ForecastPresenter.new(view_context, @forecast, @currency_rates)
+  end
 
   def new
     @forecast = current_user.forecasts.build
@@ -16,7 +24,7 @@ class ForecastsController < ApplicationController
 
   def create
     respond_to do |format|
-      if @forecast.save
+      if ForecastBuilder.new(@forecast).perform
         format.html { redirect_to @forecast, notice: 'Forecast was successfully created.' }
         format.json { render :show, status: :created, location: @forecast }
       else
@@ -27,6 +35,7 @@ class ForecastsController < ApplicationController
   end
 
   def update
+    # ForecastBuilder
     respond_to do |format|
       if @forecast.update(forecast_params)
         format.html { redirect_to @forecast, notice: 'Forecast was successfully updated.' }
@@ -58,5 +67,14 @@ class ForecastsController < ApplicationController
 
   def build_forecast
     @forecast = current_user.forecasts.build(forecast_params)
+  end
+
+  def dates_range
+    # FOR NOW PREVIEW ONLY CACHED DATA
+    # @forecast.date_from.beginning_of_week..@forecast.date_to
+
+    # TODO: REMOVE NEXT TWO LINES
+    forecast_days_count = (@forecast.date_from...@forecast.date_to).count
+    (@forecast.date_from - forecast_days_count.days)..@forecast.date_from
   end
 end
