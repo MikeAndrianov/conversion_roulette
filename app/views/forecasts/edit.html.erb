@@ -1,8 +1,16 @@
 <h1>Editing Forecast</h1>
 
-<div class="col col-lg-4">
-  <%= render 'form', forecast: @forecast %>
+<div class='row'>
+  <div class='col col-lg-4'>
+    <%= render 'form', forecast: @forecast %>
 
-  <%= link_to 'Show', @forecast %> |
-  <%= link_to 'Back', forecasts_path %>
+    <%= link_to 'Show', @forecast %> |
+    <%= link_to 'Back', forecasts_path %>
+  </div>
+
+  <div class='col col-lg-8'>
+    <% if @forecast.completed? %>
+      <%= @presenter.exchange_amounts_line_chart(ytitle: "Amount (#{@forecast.target_currency})", library: { title: 'Exchange Amount' }) %>
+    <% end %>
+  </div>
 </div>

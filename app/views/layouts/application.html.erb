@@ -22,6 +22,13 @@
         </div>
       <% end %>
 
+      <% if current_user %>
+        <nav class='nav justify-content-end'>
+          <%= link_to 'Forecasts', root_path, class: 'nav-link active' %>
+          <%= link_to 'Log Out', destroy_user_session_path, method: :delete, class: 'nav-link' %>
+        </nav>
+      <% end %>
+
       <%= yield %>
     </div>
   </body>

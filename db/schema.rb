@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20171014133703) do
 
   create_table "forecast_currency_rates", force: :cascade do |t|
     t.date "date"
-    t.string "rate"
+    t.float "rate"
     t.bigint "forecast_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

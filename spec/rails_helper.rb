@@ -7,6 +7,7 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'rspec/rails'
 require 'faker'
 require 'support/factory_girl'
+require 'aasm/rspec'
 
 ActiveRecord::Migration.maintain_test_schema!
 

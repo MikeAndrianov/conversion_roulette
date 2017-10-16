@@ -1,7 +1,7 @@
 <%= form_with(model: forecast, local: true) do |f| %>
   <div class='form-group'>
     <%= f.label :currency %>
-    <%= f.select :currency, Forecast::SUPPORTED_CURRENCIES, {}, { id: :forecast_currency, class: 'form-control' } %>
+    <%= f.select :currency, CurrencyRate::SUPPORTED_CURRENCIES, {}, { id: :forecast_currency, class: 'form-control' } %>
   </div>
 
   <div class='form-group'>
@@ -11,7 +11,7 @@
 
   <div class='form-group'>
     <%= f.label :target_currency %>
-    <%= f.select :target_currency, Forecast::SUPPORTED_CURRENCIES, {}, { id: :forecast_currency, class: 'form-control' } %>
+    <%= f.select :target_currency, CurrencyRate::SUPPORTED_CURRENCIES, {}, { id: :forecast_currency, class: 'form-control' } %>
   </div>
 
   <div class='form-group'>

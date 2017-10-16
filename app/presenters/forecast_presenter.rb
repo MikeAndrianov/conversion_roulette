@@ -1,11 +1,11 @@
 class ForecastPresenter
-  def initialize(view, forecast, currency_rates)
+  def initialize(view, currency_rates, options = {})
     @view = view
-    @forecast = forecast
     @currency_rates = currency_rates
+    @options = options
 
     @exchanged_amounts = @currency_rates.each_with_object({}) do |currency_rate, result|
-      result[currency_rate.date] = currency_rate.exchanged_amount(@forecast)
+      result[currency_rate.date] = currency_rate.amount
     end
   end
 
@@ -16,7 +16,7 @@ class ForecastPresenter
   def exchange_amounts_table
     @view.content_tag(:div) do
       currencies_grouped_by_week.each_with_index do |week_data, week_number|
-        @view.concat @view.content_tag(:h3,  "Week #{week_number}")
+        @view.concat @view.content_tag(:h3, "Week #{week_number}")
         @view.concat build_table(week_data)
       end
     end
@@ -44,11 +44,11 @@ class ForecastPresenter
     end
   end
 
-  def table_head(week_data)
+  def table_head(_week_data)
     @view.content_tag(:thead, class: 'thead-default') do
       @view.content_tag(:tr) do
         @view.concat @view.content_tag(:th, 'Date')
-        @view.concat @view.content_tag(:th, "Rate (#{@forecast.currency}/#{@forecast.target_currency})")
+        @view.concat @view.content_tag(:th, "Rate (#{@options[:currency]}/#{@options[:target_currency]})")
         @view.concat @view.content_tag(:th, 'Sum of Exchanged Amount')
         @view.concat @view.content_tag(:th, 'Profit/Loss')
         @view.concat @view.content_tag(:th, 'Rank')
@@ -65,8 +65,8 @@ class ForecastPresenter
   def date_info(currency_rate)
     @view.content_tag(:tr) do
       @view.concat @view.content_tag(:td, @view.format_date(currency_rate.date))
-      @view.concat @view.content_tag(:td, currency_rate.rate(@forecast))
-      @view.concat @view.content_tag(:td, currency_rate.exchanged_amount(@forecast))
+      @view.concat @view.content_tag(:td, currency_rate.rate)
+      @view.concat @view.content_tag(:td, currency_rate.amount)
       @view.concat @view.content_tag(:td, '?')
       @view.concat @view.content_tag(:td, '??')
     end

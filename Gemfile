@@ -41,6 +41,7 @@ gem 'fixer_api', git: 'https://github.com/MikeAndrianov/fixer_api.git'
 gem 'geared_pagination'
 gem 'pg'
 gem 'rubocop', require: false
+gem 'sidekiq'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

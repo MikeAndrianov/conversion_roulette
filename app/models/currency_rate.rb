@@ -4,20 +4,17 @@ class CurrencyRate < ApplicationRecord
   validates :base, :date, :rates, presence: true
   validates :base, inclusion: { in: CurrencyRate::SUPPORTED_CURRENCIES }
 
-  def self.dates_currencies_ratio(base_currency, target_currency, dates_range)
-    where(base: base_currency, date: dates_range)
-    .order(:date)
-    .each_with_object({}) do |currency_rate, result|
-      result[currency_rate.date] = currency_rate.rates[target_currency]
-    end
+  def self.find_or_fetch(base_currency, dates_range)
+    dates_range.map do |date|
+      find_by(base: base_currency, date: date) || fetch(date, base_currency)
+    end.compact
   end
 
-  def self.exchange_amounts(base_currency, target_currency, dates_range, amount)
-    where(base: base_currency, date: dates_range)
-    .order(:date)
-    .each_with_object({}) do |currency_rate, result|
-      result[currency_rate.date] = currency_rate.rates[target_currency] * amount
-    end
+  def self.fetch(date, currency)
+    response = FixerApi::Client.get_rates_for_day(date, base: currency)
+    return unless response
+
+    create(response)
   end
 
   def rate(forecast)
@@ -25,6 +22,6 @@ class CurrencyRate < ApplicationRecord
   end
 
   def exchanged_amount(forecast)
-    rates[forecast.target_currency] * forecast.amount
+    rate(forecast) * forecast.amount
   end
 end

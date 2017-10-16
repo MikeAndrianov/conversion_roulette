@@ -1,20 +1,13 @@
 class ForecastsController < ApplicationController
   before_action :set_forecast, only: %i[show edit update destroy]
+  before_action :set_forecast_presenter, only: %i[show edit]
   before_action :build_forecast, only: :create
 
   def index
     set_page_and_extract_portion_from current_user.forecasts.order(updated_at: :desc)
   end
 
-  def show
-    # TODO: fix json response or remove
-    @currency_rates = CurrencyRate.where(
-      base: @forecast.currency,
-      date: dates_range
-    ).order(:date)
-
-    @presenter = ForecastPresenter.new(view_context, @forecast, @currency_rates)
-  end
+  def show; end
 
   def new
     @forecast = current_user.forecasts.build
@@ -24,7 +17,8 @@ class ForecastsController < ApplicationController
 
   def create
     respond_to do |format|
-      if ForecastBuilder.new(@forecast).perform
+      if @forecast.save
+        ForecastBuilder.new(@forecast).perform
         format.html { redirect_to @forecast, notice: 'Forecast was successfully created.' }
         format.json { render :show, status: :created, location: @forecast }
       else
@@ -35,9 +29,10 @@ class ForecastsController < ApplicationController
   end
 
   def update
-    # ForecastBuilder
     respond_to do |format|
       if @forecast.update(forecast_params)
+        ForecastBuilder.new(@forecast).rebuild
+
         format.html { redirect_to @forecast, notice: 'Forecast was successfully updated.' }
         format.json { render :show, status: :ok, location: @forecast }
       else
@@ -59,6 +54,13 @@ class ForecastsController < ApplicationController
 
   def set_forecast
     @forecast = current_user.forecasts.find(params[:id])
+  end
+
+  def set_forecast_presenter
+    currency_rates = @forecast.currency_rates_from_beginning_of_week
+    opts = { currency: @forecast.currency, target_currency: @forecast.target_currency }
+
+    @presenter = ForecastPresenter.new(view_context, currency_rates, opts)
   end
 
   def forecast_params

@@ -1,6 +1,8 @@
 <h1>Forecasts</h1>
 
-<%= render @page.records %>
+<div class='row'>
+  <%= render @page.records %>
+</div>
 
 <%= @page.number %> of <%= @page.recordset.page_count %> (<%= @page.recordset.records_count %> total forecasts):
 <%= link_to "Next page", messages_path(page: @page.next_number) unless @page.last? %>
