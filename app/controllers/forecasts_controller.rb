@@ -57,6 +57,8 @@ class ForecastsController < ApplicationController
   end
 
   def set_forecast_presenter
+    @forecast = ForecastDecorator.new(@forecast)
+
     currency_rates = @forecast.currency_rates_from_beginning_of_week
     opts = { currency: @forecast.currency, target_currency: @forecast.target_currency }
 
@@ -69,14 +71,5 @@ class ForecastsController < ApplicationController
 
   def build_forecast
     @forecast = current_user.forecasts.build(forecast_params)
-  end
-
-  def dates_range
-    # FOR NOW PREVIEW ONLY CACHED DATA
-    # @forecast.date_from.beginning_of_week..@forecast.date_to
-
-    # TODO: REMOVE NEXT TWO LINES
-    forecast_days_count = (@forecast.date_from...@forecast.date_to).count
-    (@forecast.date_from - forecast_days_count.days)..@forecast.date_from
   end
 end
