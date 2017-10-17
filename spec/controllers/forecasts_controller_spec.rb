@@ -6,6 +6,8 @@ RSpec.describe ForecastsController, type: :controller do
   before { sign_in(user) }
 
   describe 'GET #index' do
+    before { allow_any_instance_of(Forecast).to receive(:currency_rates_from_beginning_of_week).and_return([]) }
+
     let!(:forecast) { create(:forecast, user: user) }
 
     it 'returns a success response' do
@@ -17,6 +19,8 @@ RSpec.describe ForecastsController, type: :controller do
 
   describe 'GET #show' do
     let!(:forecast) { create(:forecast, user: user) }
+
+    before { allow_any_instance_of(Forecast).to receive(:currency_rates_from_beginning_of_week).and_return([]) }
 
     it 'returns a success response' do
       get :show, params: { id: forecast.to_param }
@@ -35,6 +39,8 @@ RSpec.describe ForecastsController, type: :controller do
 
   describe 'GET #edit' do
     let!(:forecast) { create(:forecast, user: user) }
+
+    before { allow_any_instance_of(Forecast).to receive(:currency_rates_from_beginning_of_week).and_return([]) }
 
     it 'returns a success response' do
       get :edit, params: { id: forecast.to_param }

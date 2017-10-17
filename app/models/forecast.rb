@@ -42,20 +42,31 @@ class Forecast < ApplicationRecord
   end
 
   def currency_rates_from_beginning_of_week
-    (currency_rates_for_fulling_first_week_days + forecast_currency_rates).each_with_object([]) do |currency_rate, res|
-      rate = currency_rate.is_a?(CurrencyRate) ? currency_rate.rate(self) : currency_rate.rate
-      amount = currency_rate.is_a?(CurrencyRate) ? currency_rate.exchanged_amount(self) : currency_rate.exchanged_amount
+    current_amount = currency_rates_for_fulling_first_week_days.last.exchanged_amount(self)
 
-      res << OpenStruct.new(rate: rate, amount: amount, date: currency_rate.date)
+    (currency_rates_for_fulling_first_week_days + forecast_currency_rates).each_with_object([]) do |currency_rate, res|
+      rate, amount = if currency_rate.is_a?(CurrencyRate)
+                       [currency_rate.rate(self), currency_rate.exchanged_amount(self)]
+                     else
+                       [currency_rate.rate, currency_rate.exchanged_amount]
+                     end
+
+      res << OpenStruct.new(
+        rate: rate,
+        amount: amount,
+        date: currency_rate.date,
+        profit: amount - current_amount
+      )
     end
   end
 
   private
 
   def currency_rates_for_fulling_first_week_days
-    week_started_day = date_from.beginning_of_week
-
-    CurrencyRate.where(base: currency, date: week_started_day...date_from).order(:date)
+    @currency_rates_for_filling ||= CurrencyRate.where(
+      base: currency,
+      date: date_from.beginning_of_week...date_from
+    ).order(:date)
   end
 
   def set_interval

@@ -50,7 +50,7 @@ class ForecastPresenter
         @view.concat @view.content_tag(:th, 'Date')
         @view.concat @view.content_tag(:th, "Rate (#{@options[:currency]}/#{@options[:target_currency]})")
         @view.concat @view.content_tag(:th, 'Sum of Exchanged Amount')
-        @view.concat @view.content_tag(:th, 'Profit/Loss')
+        @view.concat @view.content_tag(:th, "Profit/Loss (#{@options[:target_currency]})")
         @view.concat @view.content_tag(:th, 'Rank')
       end
     end
@@ -67,7 +67,9 @@ class ForecastPresenter
       @view.concat @view.content_tag(:td, @view.format_date(currency_rate.date))
       @view.concat @view.content_tag(:td, currency_rate.rate)
       @view.concat @view.content_tag(:td, currency_rate.amount)
-      @view.concat @view.content_tag(:td, '?')
+      @view.concat(@view.content_tag(:td) do
+        @view.content_tag(:span, currency_rate.profit, class: currency_rate.profit < 0 ? 'text-danger' : 'text-success')
+      end)
       @view.concat @view.content_tag(:td, '??')
     end
   end
