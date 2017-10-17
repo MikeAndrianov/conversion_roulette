@@ -1,6 +1,6 @@
 <div class='card m-4' style="width: 20rem;">
   <% if forecast.completed? %>
-    <%= ForecastPresenter.new(self, forecast.currency_rates_from_beginning_of_week).exchange_amounts_line_chart(height: '200px', library: { hAxis: {showTextEvery: 15, slantedText: false}  }) %>
+    <%= ForecastPresenter.new(self, ForecastDecorator.new(forecast).currency_rates_from_beginning_of_week).exchange_amounts_line_chart(height: '200px', library: { hAxis: {showTextEvery: 15, slantedText: false}  }) %>
     <% else %>
       <div class="forecast-tile">Processing...</div>
     <% end %>
